@@ -4,6 +4,7 @@ public class Game {
     GameBoard gb = new GameBoard();
     Scanner sc = new Scanner(System.in);
     int input = sc.nextInt();
+    String user;
 
     public void play() {
 
@@ -11,7 +12,11 @@ public class Game {
        placement();
 
 
+
     }
+
+
+
     public void printBoard() {
         for (char[] row : gb.getBoard() ){
             for (char ch : row) {
@@ -24,36 +29,46 @@ public class Game {
         System.out.println("Enter your placement 1-9");
         input = sc.nextInt();
         System.out.println(input);
+        char symbol = ' ';
+
+        if(user.equals("player")){
+            symbol = 'X';
+        }else if(user.equals("computer")){
+            symbol = 'Y';
+        }
 
         switch(input){
             case 1:
-                gb.getBoard()[0][0] = 'X';
+                gb.getBoard()[0][0] = symbol;
                 break;
             case 2:
-                gb.getBoard()[0][2] = 'X';
+                gb.getBoard()[0][2] = symbol;
                 break;
             case 3:
-                gb.getBoard()[0][4] = 'X';
+                gb.getBoard()[0][4] = symbol;
                 break;
             case 4:
-                gb.getBoard()[2][0] = 'X';
+                gb.getBoard()[2][0] = symbol;
                 break;
             case 5:
-                gb.getBoard()[2][2] = 'X';
+                gb.getBoard()[2][2] = symbol;
                 break;
             case 6:
-                gb.getBoard()[2][4] = 'X';
+                gb.getBoard()[2][4] = symbol;
                 break;
             case 7:
-                gb.getBoard()[4][0] = 'X';
+                gb.getBoard()[4][0] = symbol;
                 break;
             case 8:
-                gb.getBoard()[4][2] = 'X';
+                gb.getBoard()[4][2] = symbol;
                 break;
             case 9:
-                gb.getBoard()[4][4] = 'X';
+                gb.getBoard()[4][4] = symbol;
                 break;
+                default:
+                    break;
         }
         printBoard();
     }
+
 }
