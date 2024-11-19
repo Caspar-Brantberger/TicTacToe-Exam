@@ -1,42 +1,43 @@
-import java.sql.SQLOutput;
+
 import java.util.*;
 
 public class Game {
     GameBoard gb = new GameBoard();
     Scanner sc = new Scanner(System.in);
     Random AI = new Random();
-    ArrayList<Integer> playerpos = new ArrayList<Integer>();
-    ArrayList<Integer> AIpos = new ArrayList<Integer>();
+    ArrayList<Integer> playerpos = new ArrayList<>();
+    ArrayList<Integer> AIpos = new ArrayList<>();
 
     public void play() {
 
-       printBoard();
-       GameLoop();
-       playAgain();
+        printBoard(gb.getBoard());
+        GameLoop();
+        //playAgain();
 
     }
 
-    public void printBoard() {
+    public void printBoard(char [] []board ) {
         for (char[] row : gb.getBoard() ){
             for (char ch : row) {
                 System.out.print(ch);
             }
-           System.out.println();
+            System.out.println();
         }
+
     }
-    public void  placement(char [][] board,int playerInput,String user) {
+    public  void placement(char [][] board, int pos, String user) {
 
         char symbol = ' ';
 
         if(user.equals("player")){
-          symbol = 'X';
-          playerpos.add(playerInput);
+            symbol = 'X';
+            playerpos.add(pos);
         }else if(user.equals("computer")){
-          symbol = 'Y';
-          AIpos.add(playerInput);
+            symbol = 'Y';
+            AIpos.add(pos);
         }
 
-        switch(playerInput){
+        switch(pos){
             case 1:
                 gb.getBoard()[0][0] = symbol;
                 break;
@@ -64,82 +65,80 @@ public class Game {
             case 9:
                 gb.getBoard()[4][4] = symbol;
                 break;
-                default:
-                    break;
+            default:
+                break;
         }
-        printBoard();
+        printBoard(gb.getBoard());
+
     }
     public void GameLoop() {
         while (true) {
             System.out.println("Enter your placement 1-9");
             int playerInput = sc.nextInt();
-            System.out.println(playerInput);
-            while (playerpos.contains(playerInput) || AIpos.contains(playerpos)) {
-                System.out.println("Posistion is already placed! Enter a free posistion");
+            while(playerpos.contains(playerInput)||AIpos.contains(playerInput)){
+                System.out.println("Posisiton is taken, enter a valid option");
                 playerInput = sc.nextInt();
             }
+
             placement(gb.board, playerInput, "player");
 
-            int aiInput= AI.nextInt(9)+ 1;
-            while (playerpos.contains(aiInput) || AIpos.contains(aiInput)) {
-                aiInput = AI.nextInt(9)+ 1;
+
+            int aiInput = AI.nextInt(9) + 1;
+            while(playerpos.contains(AIpos)||AIpos.contains(AIpos)){
+                 aiInput = AI.nextInt(9) + 1;
             }
             placement(gb.board, aiInput, "computer");
 
-            String results = checkWinner();
-            if (results.length() > 0) {
-                System.out.println(results);
-                break;
-            }
-            results = checkWinner();
-            if (results.length() > 0) {
-                System.out.println(results);
-                break;
-            }
+            printBoard(gb.getBoard());
+
+           boolean result = checkWinnerForPlayer(gb.getBoard());
+            System.out.println(result);
+
         }
 
     }
-    public String checkWinner() {
-        List top = Arrays.asList(gb.board, 1, 2, 3);
-        List middle = Arrays.asList(gb.board, 4, 5, 6);
-        List bottom = Arrays.asList(gb.board, 7, 8, 9);
-        List leftcol = Arrays.asList(gb.board, 1, 4, 7);
-        List midcol = Arrays.asList(gb.board, 2, 5, 8);
-        List rightcol = Arrays.asList(gb.board, 3, 6, 9);
-        List cross1 = Arrays.asList(gb.board, 1, 5, 9);
-        List cross2 = Arrays.asList(gb.board, 7, 5, 3);
-
-
-        List<List> Wins = new ArrayList<List>();
-        Wins.add(top);
-        Wins.add(middle);
-        Wins.add(bottom);
-        Wins.add(leftcol);
-        Wins.add(midcol);
-        Wins.add(rightcol);
-        Wins.add(cross1);
-        Wins.add(cross2);
-
-
-        for (List list : Wins) {
-            if (playerpos.containsAll(list)) {
-                return "GG good game, you won";
-            } else if (AIpos.containsAll(list)) {
-                return "lol get gud. AI wins!";
-            } else if (playerpos.size() + AIpos.size() == 9) {
-                return "You both suck";
-            }
+    public boolean checkWinnerForPlayer(char [][] board) {
+        if (checkOpponent(board,'X')){
+            printBoard(board);
+            System.out.println("Player wins");
+            return true;
         }
-      return "";
-    }
-    public void playAgain(){
-        System.out.println("Do you want to play again? (Yes/No)");
-        if (sc.next().toLowerCase().equals("y")) {
-            GameLoop();
-        }else if (sc.next().toLowerCase().equals("n")) {
-            System.out.println("Bye bye, have a nice day!");
+        if (checkOpponent(board,'Y')){
+            printBoard(board);
+            System.out.println("Computer wins");
+            return true;
         }
 
+        for(int i = 0; i < gb.getBoard().length; i++){
+           for(int j= 0; j < gb.getBoard()[i].length; j++){
+               if(gb.getBoard()[i][j] == ' '){
+                   return false;
+               }
+           }
+        }
+        printBoard(board);
+        System.out.println("Tie,nobody wins");
+        return true;
     }
+    public boolean checkOpponent(char [][] board,char symbol) {
+        if ((board[0][0] == symbol && board[0][2] == symbol && board[0][4] == symbol) ||
+                (board[2][0] == symbol && board[2][2] == symbol && board[2][4] == symbol) ||
+                (board[4][0] == symbol && board[4][2] == symbol && board[4][4] == symbol) ||
+
+                (board[0][0] == symbol && board[2][0] == symbol && board[4][0] == symbol) ||
+                (board[0][2] == symbol && board[2][2] == symbol && board[4][2] == symbol) ||
+                (board[0][4] == symbol && board[2][4] == symbol && board[4][4] == symbol) ||
+
+                (board[0][0] == symbol && board[2][2] == symbol && board[4][4] == symbol) ||
+                (board[4][0] == symbol && board[2][2] == symbol && board[0][4] == symbol)) {
+            return true;
+        }
+        return false;
+    }
+
 
 }
+
+
+
+
