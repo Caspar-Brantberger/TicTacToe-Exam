@@ -12,8 +12,6 @@ public class Game {
 
         printBoard(gb.getBoard());
         GameLoop();
-        //playAgain();
-
     }
 
     public void printBoard(char [] []board ) {
@@ -84,7 +82,7 @@ public class Game {
 
 
             int aiInput = AI.nextInt(9) + 1;
-            while(playerpos.contains(AIpos)||AIpos.contains(AIpos)){
+            while(playerpos.contains(aiInput)||AIpos.contains(aiInput)){
                  aiInput = AI.nextInt(9) + 1;
             }
             placement(gb.board, aiInput, "computer");
@@ -93,7 +91,6 @@ public class Game {
 
            boolean result = checkWinnerForPlayer(gb.getBoard());
             System.out.println(result);
-
         }
 
     }
@@ -101,11 +98,13 @@ public class Game {
         if (checkOpponent(board,'X')){
             printBoard(board);
             System.out.println("Player wins");
+            playAgain();
             return true;
         }
         if (checkOpponent(board,'Y')){
             printBoard(board);
             System.out.println("Computer wins");
+            playAgain();
             return true;
         }
 
@@ -134,6 +133,22 @@ public class Game {
             return true;
         }
         return false;
+    }
+    public void playAgain(){
+        System.out.println("Do you wan to play again? yes/no");
+        while(true){
+            String input = sc.nextLine();
+            if(input.toLowerCase().startsWith("y")){
+                printBoard(gb.getBoard());
+                GameLoop();
+                return;
+            }
+            if(input.toLowerCase().startsWith("n")){
+                System.out.println("Shutting down program..");
+                return;
+            }
+
+        }
     }
 
 
