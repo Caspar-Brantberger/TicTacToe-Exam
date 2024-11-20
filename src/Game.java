@@ -90,8 +90,9 @@ public class Game {
             printBoard(gb.getBoard());
 
            boolean result = checkWinnerForPlayer(gb.getBoard());
-            System.out.println(result);
+
         }
+
 
     }
     public boolean checkWinnerForPlayer(char [][] board) {
@@ -134,24 +135,25 @@ public class Game {
         }
         return false;
     }
-    public void playAgain(){
+    public boolean playAgain(){
+
         System.out.println("Do you wan to play again? yes/no");
         while(true){
             String input = sc.nextLine();
             if(input.toLowerCase().startsWith("y")){
-                printBoard(gb.getBoard());
+                resetGame();
                 GameLoop();
-                return;
+                return true;
             }
             if(input.toLowerCase().startsWith("n")){
                 System.out.println("Shutting down program..");
-                return;
+                return false;
             }
-
         }
     }
+    public void resetGame (){
 
-
+    }
 }
 
 

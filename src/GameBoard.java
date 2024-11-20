@@ -1,6 +1,6 @@
 public class GameBoard {
     public char [][] board =
-                    {{' ','︱',' ','︱',' '},
+            {{' ','︱',' ','︱',' '},
                     {'-','+','-','+','-'},
                     {' ','︱',' ','︱',' '},
                     {'-','+','-','+','-'},
@@ -14,8 +14,9 @@ public class GameBoard {
         return board;
     }
 
-    public void setBoard(char[][] board) {
+    public char[][] setBoard() {
         this.board = board;
+        return null;
     }
 }
 
