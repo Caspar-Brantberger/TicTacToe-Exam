@@ -1,10 +1,11 @@
 
 import java.util.*;
 
+import static java.lang.System.exit;
+
 public class Game {
     GameBoard gb = new GameBoard();
     Scanner sc = new Scanner(System.in);
-    Random AI = new Random();
     ArrayList<Integer> playerpos2 = new ArrayList<>();
     ArrayList<Integer> playerpos = new ArrayList<>();
 
@@ -76,6 +77,8 @@ public class Game {
             while(playerpos.contains(playerInput)||playerpos2.contains(playerInput)){
                 System.out.println("Posisiton is taken, enter a valid option");
                 playerInput = sc.nextInt();
+
+
             }
 
             placement(gb.board, playerInput, "player");
@@ -85,32 +88,36 @@ public class Game {
             while(playerpos2.contains(playerInput2)||playerpos.contains(playerInput2)){
                 System.out.println("Posisiton is taken, enter a valid option");
                 playerInput2 = sc.nextInt();
+
             }
 
             placement(gb.board, playerInput2, "player2");
 
             printBoard(gb.getBoard());
 
-            boolean result = checkWinnerForPlayer(gb.getBoard());
+            boolean result =checkWinnerForPlayer(gb.getBoard());
+
 
         }
 
 
     }
     public boolean checkWinnerForPlayer(char [][] board) {
-        if (checkOpponent(board,'X')){
+        if (checkOpponent(board, 'X')) {
             printBoard(board);
             System.out.println("Player wins");
             playAgain();
             return true;
         }
-        if (checkOpponent(board,'Y')){
+        if (checkOpponent(board, 'Y')) {
             printBoard(board);
             System.out.println("Player2 wins");
             playAgain();
             return true;
+        }else if(playerpos.size()+ playerpos2.size() == 9){
+            System.out.println("Tie");
+            return true;
         }
-
         for(int i = 0; i < gb.getBoard().length; i++){
             for(int j= 0; j < gb.getBoard()[i].length; j++){
                 if(gb.getBoard()[i][j] == ' '){
@@ -118,9 +125,11 @@ public class Game {
                 }
             }
         }
-        printBoard(board);
+        printBoard(gb.getBoard());
         System.out.println("Tie,nobody wins");
         return true;
+
+
     }
     public boolean checkOpponent(char [][] board,char symbol) {
         if ((board[0][0] == symbol && board[0][2] == symbol && board[0][4] == symbol) ||
@@ -148,7 +157,8 @@ public class Game {
             }
             if(input.toLowerCase().startsWith("n")){
                 System.out.println("Shutting down program..");
-                return false;
+                System.exit(0);
+                return true;
             }
         }
 
@@ -162,6 +172,7 @@ public class Game {
         playerpos.clear();
         playerpos2.clear();
     }
+
 }
 
 
