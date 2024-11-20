@@ -5,8 +5,8 @@ public class Game {
     GameBoard gb = new GameBoard();
     Scanner sc = new Scanner(System.in);
     Random AI = new Random();
+    ArrayList<Integer> playerpos2 = new ArrayList<>();
     ArrayList<Integer> playerpos = new ArrayList<>();
-    ArrayList<Integer> AIpos = new ArrayList<>();
 
     public void play() {
 
@@ -30,9 +30,9 @@ public class Game {
         if(user.equals("player")){
             symbol = 'X';
             playerpos.add(pos);
-        }else if(user.equals("computer")){
+        }else if(user.equals("player2")){
             symbol = 'Y';
-            AIpos.add(pos);
+            playerpos2.add(pos);
         }
 
         switch(pos){
@@ -71,25 +71,27 @@ public class Game {
     }
     public void GameLoop() {
         while (true) {
-            System.out.println("Enter your placement 1-9");
+            System.out.println("Enter your placement 1-9, Player`s turn");
             int playerInput = sc.nextInt();
-            while(playerpos.contains(playerInput)||AIpos.contains(playerInput)){
+            while(playerpos.contains(playerInput)||playerpos2.contains(playerInput)){
                 System.out.println("Posisiton is taken, enter a valid option");
                 playerInput = sc.nextInt();
             }
 
             placement(gb.board, playerInput, "player");
 
-
-            int aiInput = AI.nextInt(9) + 1;
-            while(playerpos.contains(aiInput)||AIpos.contains(aiInput)){
-                 aiInput = AI.nextInt(9) + 1;
+            System.out.println("Enter your placement 1-9,Player2`s turn");
+            int playerInput2 = sc.nextInt();
+            while(playerpos2.contains(playerInput2)||playerpos.contains(playerInput2)){
+                System.out.println("Posisiton is taken, enter a valid option");
+                playerInput2 = sc.nextInt();
             }
-            placement(gb.board, aiInput, "computer");
+
+            placement(gb.board, playerInput2, "player2");
 
             printBoard(gb.getBoard());
 
-           boolean result = checkWinnerForPlayer(gb.getBoard());
+            boolean result = checkWinnerForPlayer(gb.getBoard());
 
         }
 
@@ -104,17 +106,17 @@ public class Game {
         }
         if (checkOpponent(board,'Y')){
             printBoard(board);
-            System.out.println("Computer wins");
+            System.out.println("Player2 wins");
             playAgain();
             return true;
         }
 
         for(int i = 0; i < gb.getBoard().length; i++){
-           for(int j= 0; j < gb.getBoard()[i].length; j++){
-               if(gb.getBoard()[i][j] == ' '){
-                   return false;
-               }
-           }
+            for(int j= 0; j < gb.getBoard()[i].length; j++){
+                if(gb.getBoard()[i][j] == ' '){
+                    return false;
+                }
+            }
         }
         printBoard(board);
         System.out.println("Tie,nobody wins");
@@ -142,7 +144,6 @@ public class Game {
             String input = sc.nextLine();
             if(input.toLowerCase().startsWith("y")){
                 resetGame();
-                GameLoop();
                 return true;
             }
             if(input.toLowerCase().startsWith("n")){
@@ -150,12 +151,17 @@ public class Game {
                 return false;
             }
         }
+
     }
     public void resetGame (){
-
+        gb =new GameBoard();
+        resetVariables();
+        printBoard(gb.getBoard());
+    }
+    public void resetVariables(){
+        playerpos.clear();
+        playerpos2.clear();
     }
 }
-
-
 
 

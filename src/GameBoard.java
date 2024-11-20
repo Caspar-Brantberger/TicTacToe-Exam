@@ -7,7 +7,7 @@ public class GameBoard {
                     {' ','︱',' ','︱',' '}};
 
     public GameBoard() {
-
+        this.board = board;
     }
 
     public char[][] getBoard() {
